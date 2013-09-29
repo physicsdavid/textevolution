@@ -2,7 +2,8 @@
 
 import string
 import random
-#import enchant
+import enchant
+from enchant.tokenize import get_tokenizer
 
 # ======================================================================
 
@@ -47,6 +48,9 @@ class Sentence(object):
         self.insertionrate = 0
         self.deletionrate = 0
         
+        self.d = enchant.Dict("en_US")
+        self.tknzr = get_tokenizer("en_US")
+        
         return None
 
 # ----------------------------------------------------------------------------
@@ -78,7 +82,8 @@ class Sentence(object):
 
     def display(self):
 
-        print "Sentence:",self.sentence
+        #print "Sentence:",self.sentence
+        print self.sentence
         
         return None
 
@@ -92,7 +97,8 @@ class Sentence(object):
             mutationtype = random.randint(0, 99)
 
             if mutationtype < self.donothingrate: # make no mutation at all
-                print "Do nothing"
+                continue
+                #print "Do nothing"
             elif mutationtype < self.donothingrate+self.pointmutationrate: # mutate one letter
                 randomposition = random.randint(0,len(self.sentence)-1)
                 #print randomposition
@@ -113,9 +119,29 @@ class Sentence(object):
                 self.sentence = self.sentence[:randomposition] + self.sentence[randomposition+1:]
                 
             # Correct after the mutation
+            # print self.d.check(self.sentence)
+            
+            newsentence = ''
+            
+            for word in self.tknzr(self.sentence):
+            	#print word, self.d.suggest(word[0])[0]
+            	if len(word[0])>1:
+            	    if self.d.check(word[0]):
+            	    	newword = word[0]
+            	    else:
+            	        if self.d.suggest(word[0]):
+            	            newword = self.d.suggest(word[0])[0]
+            	        else:
+            	            newword = ''  
+            	else:
+            	    newword = ''
+            	
+            	#print word, newword    
         
-        
-        
+                newsentence = newsentence + ' ' + newword
+                
+            self.sentence = newsentence
+            
         return None
         
 # ============================================================================

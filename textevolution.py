@@ -1,23 +1,28 @@
 import textevolution
 
-DONOTHING = 50
-POINTMUTATE = 40
-INSERTION = 5
-DELETION = 5
+DONOTHING = 30
+POINTMUTATE = 60
+INSERTION = 10
+DELETION = 0
 
-MUTATESTEPS = 1
+MUTATESTEPS = 5
 
 #Initialize a text object
 
 darwin = textevolution.Sentence();
 
-darwin.setsentence("This is a test sentence.")
+#darwin.setsentence("From so simple a beginning endless forms most beautiful and most wonderful have been, and are being, evolved.")
+#darwin.setsentence("An American monkey, after getting drunk on brandy, would never touch it again, and thus is much wiser than most men.")
+#darwin.setsentence("I have tried lately to read Shakespeare, and found it so intolerably dull that it nauseated me.")
+darwin.setsentence("I love fools' experiments. I am always making them.")
 
 # set the mutation parameters
 
 darwin.setmutationrates(DONOTHING,POINTMUTATE,INSERTION,DELETION)
 
-for mutationstep in range(0,100):
+darwin.display()
+
+for mutationstep in range(0,30):
     #print mutationstep
     # evolve the text as required
     darwin.mutate(MUTATESTEPS)
